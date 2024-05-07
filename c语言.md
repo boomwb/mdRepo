@@ -100,11 +100,11 @@ int ()
 
 [百度](https://baidu.com)
 
-![image-20240429100655444](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\image-20240429100655444.png)
+![image-20240429100655444](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240429100655444.png)
 
 假如现有一32位int型数0x12345678，那么其MSB(Most Significant Byte，最高有效字节)为0x12，其LSB (Least Significant Byte，最低有效字节)为0x78，在CPU内存中有两种存放方式：（假设从地址0x4000开始存放）
 
-![image-20240429100727689](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\image-20240429100727689.png)
+![image-20240429100727689](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240429100727689.png)
 
 **总结：**
 
@@ -250,6 +250,95 @@ void judge_bigend_littleend3()
         printf("小端\n");
     else
         printf("大端\n");
+}
+```
+
+# 结构体
+
+## 字节对齐
+
+当声明一个结构体时，编译器通常会按照特定的内存对齐规则来布局成员，这些规则旨在提高访问内存的效率。在大多数系统上，数据类型的自然对齐是它的大小，即 `int` 类型通常需要对齐到4字节边界，`char` 类型对齐到1字节边界
+
+```
+struct Info 
+{
+	char i;
+	int j;
+}III;
+	-> 8
+typedef struct _userinfo//保存的信息
+{
+	unsigned char id;
+	unsigned char port;;		
+	struct Info III;
+}USERINFO;
+	-> 12
+
+```
+
+1. **`char i`**: 1字节大小，不需要额外对齐。
+2. **内存填充** (Padding): 由于 `int` 类型通常需要在4字节对齐的边界上，编译器可能会在 `char i` 之后插入3个字节的内存填充，以确保 `int j` 从4字节边界开始。
+3. **`int j`**: 4字节大小，按4字节边界对齐。
+
+因此，`struct Info III` 的总大小是8字节：1字节用于 `char i`，3字节的填充，然后是4字节的 `int j`.
+
+**对于 `struct _userinfo` (`USERINFO`)：**
+
+- `unsigned char id` 占用 1 字节，无需额外填充。
+- `unsigned char port` 占用 1 字节。直到这里，结构体已经使用了 2 字节，但是紧接着的是 `struct Info` 类型，它要求4字节对齐，因此编译器将添加2字节的填充，以确保 `struct Info III` 从下一个4字节对齐的边界地址开始。
+
+那么 `struct _userinfo` 的总大小就是 `struct Info` 的大小 8 字节加上 `unsigned char id`, `unsigned char port`，以及在它们和 `struct Info III` 之间的 2 字节填充，加起来总共是 12 字节。
+
+
+
+```
+HAL_StatusTypeDef WriteStructToFlash(uint32_t address, UserInfo *dataStruct, uint16_t dataSize) {
+    HAL_StatusTypeDef status = HAL_OK;
+    // 首先，需要擦除Flash
+    FLASH_EraseInitTypeDef EraseInitStruct;
+    uint32_t PAGEError = 0;
+    EraseInitStruct.TypeErase   = FLASH_TYPEERASE_PAGES;
+    EraseInitStruct.PageAddress = address;
+    EraseInitStruct.NbPages     = 1; //擦除一个Page
+
+    // 解锁Flash
+    HAL_FLASH_Unlock();
+
+    // 擦除Flash
+    status = HAL_FLASHEx_Erase(&EraseInitStruct, &PAGEError);
+    if (status != HAL_OK) {
+        return status;
+    }
+
+    // 写入数据
+    uint32_t *dataPointer = (uint32_t*)dataStruct;
+    while (dataSize > 0) {
+        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address, *(uint32_t*)(dataPointer)) == HAL_OK) {
+            address += 4; // 地址增加4字节
+            dataPointer++; // 数据指针增加1
+            dataSize -= 4; // 剩余数据大小减少4字节
+        } else {
+            // 错误处理
+            status = HAL_ERROR;
+            break;
+        }
+    }
+    // 锁定Flash
+    HAL_FLASH_Lock();
+
+    return status;
+}
+
+
+
+void ReadStructFromFlash(uint32_t address, UserInfo *dataStruct, uint16_t dataSize) {
+    uint32_t *dataPointer = (uint32_t*)dataStruct;
+    while (dataSize > 0) {
+        *dataPointer = *(__IO uint32_t*)address;
+        address += 4;
+        dataPointer++;
+        dataSize -= 4;
+    }
 }
 ```
 

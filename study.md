@@ -144,7 +144,7 @@ ROM与RAM
 版权声明：本文为CSDN博主「星沉地动」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
 原文链接：https://blog.csdn.net/qq446252221/article/details/118548591
 
-![image-20231228094405467](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\image-20231228094405467.png)
+![image-20231228094405467](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20231228094405467.png)
 
 
 
@@ -211,13 +211,13 @@ master_xfer 就是 I2C 适配器的传输函数，可以通过此函数来完成
 
 1.初始化堆栈指针
 
-![image-20240223104600082](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\image-20240223104600082.png)
+![image-20240223104600082](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240223104600082.png)
 
 	stack栈, 开辟栈的大小为 0X00000400（1KB），名字为 STACK，NOINIT 即不初始化，可读可写，8（2^3）字节对齐
 	栈的作用是用于局部变量，函数调用，函数形参等的开销，栈的大小不能超过内部 SRAM 的大小。如果编写的程序比较大，定义的局部变量很多，那么就需要修改栈的大小。硬 fault 的时候，这时你就要考虑下是不是栈不够大，溢出了。
 
 
-![image-20240223105144525](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\image-20240223105144525.png)
+![image-20240223105144525](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240223105144525.png)
 
 ```
 Heap堆
@@ -237,7 +237,7 @@ Heap堆
 
 5.调用C库函数__main初始化用户堆栈,从而最终调用main函数.
 
-![image-20240223113300560](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\image-20240223113300560.png)
+![image-20240223113300560](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240223113300560.png)
 
 
 

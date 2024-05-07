@@ -16,7 +16,7 @@ CDS是correlated double sampling的缩写，是一种降噪AD转换方式。
 
  
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps1.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps1.jpg) 
 
  
 
@@ -28,11 +28,11 @@ CDS是correlated double sampling的缩写，是一种降噪AD转换方式。
 
  
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps2.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps2.jpg) 
 
  
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps3.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps3.jpg) 
 
  
 
@@ -82,9 +82,9 @@ Operating Temperature ..............................0 to 70
 
 时序规范
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps4.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps4.jpg) 
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps5.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps5.jpg) 
 
 时序图·
 
@@ -106,7 +106,7 @@ MUX寄存器控制采样通道的顺序
 
 PGA寄存器和补偿寄存器各有3个，分别对红、绿、蓝3个通道做增益控制（可编程增益放大器）和信号补偿（偏移量）
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps6.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps6.jpg) 
 
  
 
@@ -114,7 +114,7 @@ PGA寄存器和补偿寄存器各有3个，分别对红、绿、蓝3个通道做
 
 配置寄存器
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps7.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps7.jpg) 
 
 配置寄存器控制工作模式和偏置水平。
 
@@ -152,7 +152,7 @@ D0控制HT82V38的输出模式。设置位D0高将启用一个单字节输出模
 
  
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps8.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps8.jpg) 
 
  
 
@@ -180,7 +180,7 @@ MUX在1通道模式下将保持静止。
 
  
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps9.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps9.jpg) 
 
 有三个PGA寄存器（RGB）用于分别编程红色、绿色和蓝色通道的增益。
 
@@ -188,7 +188,7 @@ MUX在1通道模式下将保持静止。
 
 位D5到D0以64个增量控制增益范围。（0011 1111）非线性的
 
-PGA寄存器的编码是直二进制的，所有零字对应于最小增益设置（1x），所有一个字对应于最大增益设置（5.85x）。PGA的增益范围从1（0 dB）到5.85（15.3 dB）![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps10.jpg)
+PGA寄存器的编码是直二进制的，所有零字对应于最小增益设置（1x），所有一个字对应于最大增益设置（5.85x）。PGA的增益范围从1（0 dB）到5.85（15.3 dB）![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps10.jpg)
 
  
 
@@ -210,7 +210,7 @@ PGA寄存器的编码是直二进制的，所有零字对应于最小增益设�
 
  
 
-![img](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\wps11.jpg) 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps11.jpg) 
 
 位D8到D0控制从250mV到+250mV的偏移范围。
 

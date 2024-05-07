@@ -1,6 +1,6 @@
 坑爹bug(ctrl+ 空格 输入法的问题)
 
-![image-20240313090351178](C:\Users\DELL\Desktop\Linux_code\Typora_Work\Typora_Pic\image-20240313090351178.png)
+![image-20240313090351178](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240313090351178.png)
 
 ```
 Windows Registry Editor Version 5.00
@@ -26,13 +26,7 @@ Windows Registry Editor Version 5.00
 
 
 
-江苏骏成电子科技股份有限公司
 
-ST7565R   SPI
-
-SMMC12832-CV-00-DNH
-
-56.0*24.0 *2.85mm
 
 
 
