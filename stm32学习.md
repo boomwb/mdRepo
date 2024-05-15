@@ -226,3 +226,16 @@ Block    64KB
 
 页写入一次256个字节(Byte)
 
+# 电机学习
+
+(2024.5.15 16点)
+
+**驱动IC ULN2003**
+
+参考链接 [【常用芯片】ULN2003工作原理及中文资料（实例：STM32驱动28BYJ48步进电机）-CSDN博客](https://blog.csdn.net/qq_38410730/article/details/79787766)
+
+![image-20240515162212298](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151622383.png)
+
+电机博客 
+
+[步进电机驱动技术3：基于ULN2003的步进电机驱动 - Moonan - 博客园 (cnblogs.com)](https://www.cnblogs.com/foxclever/p/14903679.html)
