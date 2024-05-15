@@ -34,8 +34,6 @@
 
 在串行通讯所发送数据的最后一位, 用来粗略的检验数据在传输过程中是否出错.
 
-
-
 ![image-20240515150825432](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151508485.png)
 
 
@@ -44,25 +42,9 @@
 
 
 
-
-
 补充理解:
 
 ![image-20240515145756312](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151457361.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### IIC
 
@@ -76,7 +58,7 @@
 
 I2C 的协议定义了通讯的起始和停止信号、数据有效性、响应、仲裁、时钟同步和地址广播等环节。
 
-![image-20240515145852679](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151458735.png)
+![image-20240515151710471](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151517544.png)
 
 
 
@@ -88,7 +70,7 @@ I2C 的协议定义了通讯的起始和停止信号、数据有效性、响应�
 
 当 SCL 线是高电平时 SDA 线从高电平向低电平切换，这个情况表示通讯的起始。当 SCL 是高电平时 SDA 线由低电平向高电平切换，表示通讯的停止。起始和停止信号一般由主机产生。
 
-![image-20240515145919837](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151459876.png)
+![image-20240515151602821](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151516864.png)
 
 
 
@@ -179,8 +161,6 @@ I2C 协议规定设备地址可以是 7 位或 10 位，紧跟设备地址的一
 
 #### 应用例子
 
-
-
 ### 外接FLASh
 
 DMA的基本定义
@@ -207,8 +187,6 @@ A=0010 110x，
 B=0000 0001，则执行结果为A=00101101，
 也就是说A |= B是给B中为1的位对应于A的同样位上置1，A的其他位不变
 
-
-
 启动文件由汇编(xxx.s)编写，是系统上电复位后第一个执行的程序。
 
 主要做了以下工作：
@@ -217,32 +195,16 @@ B=0000 0001，则执行结果为A=00101101，
 
 ![image-20240515150043054](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151500086.png)
 
-
-
-
-
-
-
 	stack栈, 开辟栈的大小为 0X00000400（1KB），名字为 STACK，NOINIT 即不初始化，可读可写，8（2^3）字节对齐
 	栈的作用是用于局部变量，函数调用，函数形参等的开销，栈的大小不能超过内部 SRAM 的大小。如果编写的程序比较大，定义的局部变量很多，那么就需要修改栈的大小。硬 fault 的时候，这时你就要考虑下是不是栈不够大，溢出了。
 
-
-
 ![image-20240515150109102](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151501132.png)
-
-
-
-
 
 ```
 Heap堆
 开辟堆的大小为 0X00000200（512 字节），名字为 HEAP，NOINIT 即不初始化，可读可写，8（2^3）字节对齐。__heap_base 表示对的起始地址，__heap_limit 表示堆的结束地址。堆是由低向高生长的，跟栈的生长方向相反。
 堆主要用来动态内存的分配，像 malloc() 函数申请的内存就在堆上面。
 ```
-
-
-
-
 
 2.初始化PC指针 Reset_Handler
 
@@ -252,11 +214,7 @@ Heap堆
 
 5.调用C库函数__main初始化用户堆栈,从而最终调用main函数.
 
-
-
 ![image-20240515150140544](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151501607.png)
-
-
 
 2024/2/20
 
