@@ -34,6 +34,8 @@
 
 在串行通讯所发送数据的最后一位, 用来粗略的检验数据在传输过程中是否出错.
 
+
+
 ![image-20240515145656032](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151456079.png)
 
 ![image-20240515145618391](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151456453.png)
