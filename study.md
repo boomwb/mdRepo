@@ -144,7 +144,7 @@ ROM与RAM
 
 
 
-
+![image-20240515135447500](https://raw.githubusercontent.com/boomwb/mdRepo/main/img202405151354575.png)
 
 
 
