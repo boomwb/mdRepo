@@ -26,15 +26,17 @@ SPI和IIC为同步通信，UART为异步通信，而USART为同步&异步通信�
 
 ### 串口通讯
 
+
+
 奇偶检验等N、O、E、M、S 五种串口检验位类型
 
-![image-20240307173203286](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240307173203286.png)
+![image-20240515142834135](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151428201.png)
 
-![image-20240307173335015](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240307173335015.png)
+![image-20240515142939595](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151429660.png)
 
 
 
-![image-20240307172332721](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240307172332721.png)
+
 
 
 
@@ -52,13 +54,17 @@ SPI和IIC为同步通信，UART为异步通信，而USART为同步&异步通信�
 
 **I2c物理层**
 
-![image-20240313093922098](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240313093922098.png)
+![image-20240515143041820](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151430889.png)
+
+
 
 **I2c协议层**
 
 I2C 的协议定义了通讯的起始和停止信号、数据有效性、响应、仲裁、时钟同步和地址广播等环节。
 
-![image-20240313094205407](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240313094205407.png)
+![image-20240515143103938](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151431001.png)
+
+
 
 其中 S 表示由主机的 I2C 接口产生的传输起始信号 (S)，这时连接到 I2C 总线上的所有从机都会接收到这个信号。
 起始信号产生后，所有从机就开始等待主机紧接下来广播的从机地址信号 (SLAVE_ADDRESS)。在 I2C 总线上，每个设备的地址都是唯一的，当主机广播的地址与某个设备地址相同时，这个设备就被选中了，没被选中的设备将会忽略之后的数据信号。根据 I2C 协议，这个从机地址可以是7 位或 10 位。
@@ -68,7 +74,9 @@ I2C 的协议定义了通讯的起始和停止信号、数据有效性、响应�
 
 当 SCL 线是高电平时 SDA 线从高电平向低电平切换，这个情况表示通讯的起始。当 SCL 是高电平时 SDA 线由低电平向高电平切换，表示通讯的停止。起始和停止信号一般由主机产生。
 
-![image-20240313094855556](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240313094855556.png)
+![image-20240515143131041](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151431082.png)
+
+
 
 
 
@@ -78,7 +86,9 @@ I2C 使用 SDA 信号线来传输数据，使用 SCL 信号线进行数据同步
 
 SDA 数据线在 SCL 的每个时钟周期传输一位数据.传输时，SCL 为高电平的时候 SDA 表示的数据有效,此时SDA的电平高低分别表示数据1/数据0。当 SCL 为低电平时，SDA的数据无效，一般在这个时候 SDA 进行电平切换，为下一次表示数据做好准备。每次数据传输都以字节为单位，每次传输的字节数不受限制。：
 
-![image-20240313095640962](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240313095640962.png)
+![image-20240515143150543](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151431583.png)
+
+
 
 **3.地址及数据方向**
 
@@ -90,15 +100,17 @@ I2C 协议规定设备地址可以是 7 位或 10 位，紧跟设备地址的一
 
 写数据方向时，SDA 由主机控制，从机接收信号。
 
-![image-20240313100709959](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240313100709959.png)
+![image-20240515143221936](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151432968.png)
+
+
 
 **4.响应**
 
-传输时主机产生时钟，在第 9 个时钟时，数据发送端会释放 SDA 的控制权，由数据接收端控制SDA，若 SDA 为高电平，表示非应答信号 (NACK)，低电平表示应答信号 (ACK)。![image-20240313101448908](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240313101448908.png)
+传输时主机产生时钟，在第 9 个时钟时，数据发送端会释放 SDA 的控制权，由数据接收端控制SDA，若 SDA 为高电平，表示非应答信号 (NACK)，低电平表示应答信号 (ACK)。
 
 
 
-
+![image-20240515143248928](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151432982.png)
 
 [100](#jump)
 
@@ -193,13 +205,16 @@ B=0000 0001，则执行结果为A=00101101，
 
 1.初始化堆栈指针
 
-![image-20240223104600082](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240223104600082.png)
+![image-20240515143321871](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151433903.png)
+
+
 
 	stack栈, 开辟栈的大小为 0X00000400（1KB），名字为 STACK，NOINIT 即不初始化，可读可写，8（2^3）字节对齐
 	栈的作用是用于局部变量，函数调用，函数形参等的开销，栈的大小不能超过内部 SRAM 的大小。如果编写的程序比较大，定义的局部变量很多，那么就需要修改栈的大小。硬 fault 的时候，这时你就要考虑下是不是栈不够大，溢出了。
 
+![image-20240515143352785](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151433815.png)
 
-![image-20240223105144525](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240223105144525.png)
+
 
 ```
 Heap堆
@@ -219,7 +234,7 @@ Heap堆
 
 5.调用C库函数__main初始化用户堆栈,从而最终调用main函数.
 
-![image-20240223113300560](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240223113300560.png)
+![image-20240515143411220](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151434291.png)
 
 
 

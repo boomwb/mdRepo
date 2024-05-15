@@ -1,6 +1,6 @@
 坑爹bug(ctrl+ 空格 输入法的问题)
 
-![image-20240313090351178](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240313090351178.png)
+![image-20240515135957531](https://raw.githubusercontent.com/boomwb/mdRepo/main/img202405151359565.png)
 
 ```
 Windows Registry Editor Version 5.00

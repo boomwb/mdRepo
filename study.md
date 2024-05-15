@@ -144,9 +144,9 @@ ROM与RAM
 
 
 
-![](https://raw.githubusercontent.com/boomwb/mdRepo/main/img202405151357404.png)
+![(https://raw.githubusercontent.com/boomwb/mdRepo/main/img202405151357404.png)
 
-![](https://raw.githubusercontent.com/boomwb/mdRepo/main/img202405151357628.png)
+![(https://raw.githubusercontent.com/boomwb/mdRepo/main/img202405151357628.png)
 
 
 

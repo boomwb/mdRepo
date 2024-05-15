@@ -16,7 +16,11 @@ CDS是correlated double sampling的缩写，是一种降噪AD转换方式。
 
  
 
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps1.jpg) 
+ 
+
+ 
+
+ ![image-20240515141409803](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151414862.png)
 
  
 
@@ -28,11 +32,13 @@ CDS是correlated double sampling的缩写，是一种降噪AD转换方式。
 
  
 
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps2.jpg) 
+![image-20240515141427475](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151414518.png)
+
+
+
+![image-20240515141453578](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151414669.png)
 
  
-
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps3.jpg) 
 
  
 
@@ -82,11 +88,13 @@ Operating Temperature ..............................0 to 70
 
 时序规范
 
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps4.jpg) 
+![image-20240515141525059](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151415132.png)
 
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps5.jpg) 
 
-时序图·
+
+ ![image-20240515141543586](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151415639.png)
+
+
 
 时序图：
 
@@ -106,9 +114,9 @@ MUX寄存器控制采样通道的顺序
 
 PGA寄存器和补偿寄存器各有3个，分别对红、绿、蓝3个通道做增益控制（可编程增益放大器）和信号补偿（偏移量）
 
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps6.jpg) 
+![image-20240515141611674](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151416729.png)
 
- 
+![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps6.jpg)
 
  
 
