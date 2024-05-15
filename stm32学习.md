@@ -4,7 +4,7 @@
 
 **单工**，即数据传输只在一个方向上传输，只能你给我发送或者我给你发送，方向是固定的，不能实现双向通信，如：室外天线电视、调频广播等。
 
-**半双工**比单工先进一点，传输方向可以切换，允许数据在两个方向上传输，但是某个时刻，只允许数据在一个方向上传输，可以基本双向通信，如：对讲机，IIC通信。
+**半双工** ，比单工先进一点，传输方向可以切换，允许数据在两个方向上传输，但是某个时刻，只允许数据在一个方向上传输，可以基本双向通信，如：对讲机，IIC通信。
 
 **全双工**，允许数据同时在两个方向传输。发送和接收完全独立，在发送的同时可以接收信号，或者在接收的同时可以发送。它要求发送和接收设备都要有独立的发送和接收能力，如：电话通信，SPI通信，串口通信。
 
@@ -12,10 +12,10 @@
 
 简单的说，就是同步通信需要时钟信号，而异步通信不需要时钟信号。
 
-- 同步：发送方发出数据后，等接收方发回响应以后才发下一个数据包的通讯方式。
-- 异步：发送方发出数据后，不等接收方发回响应，接着发送下个数据包的通讯方式。
+- **同步**：发送方发出数据后，等接收方发回响应以后才发下一个数据包的通讯方式。
+- **异步**：发送方发出数据后，不等接收方发回响应，接着发送下个数据包的通讯方式。
 
-SPI和IIC为同步通信，UART为异步通信，而USART为同步&异步通信。
+**SPI和IIC为同步通信，UART为异步通信**，而USART为同步&异步通信。
 
 - USART：通用同步和异步收发器
 - UART：通用异步收发器
@@ -26,13 +26,21 @@ SPI和IIC为同步通信，UART为异步通信，而USART为同步&异步通信�
 
 ### 串口通讯
 
+串口通信校验方式：5种
 
+奇校验(ODD) , 偶校验(EVEN) , 1校验(MARK), 0校验(SPACE) , 无校验(NONE).
 
-奇偶检验等N、O、E、M、S 五种串口检验位类型
+**一.校验位:**
 
-![image-20240515142834135](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151428201.png)
+在串行通讯所发送数据的最后一位, 用来粗略的检验数据在传输过程中是否出错.
 
-![image-20240515142939595](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151429660.png)
+![image-20240515145656032](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151456079.png)
+
+![image-20240515145618391](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151456453.png)
+
+补充理解:
+
+![image-20240515145756312](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151457361.png)
 
 
 
@@ -54,15 +62,13 @@ SPI和IIC为同步通信，UART为异步通信，而USART为同步&异步通信�
 
 **I2c物理层**
 
-![image-20240515143041820](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151430889.png)
-
-
+![image-20240515145837967](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151458025.png)
 
 **I2c协议层**
 
 I2C 的协议定义了通讯的起始和停止信号、数据有效性、响应、仲裁、时钟同步和地址广播等环节。
 
-![image-20240515143103938](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151431001.png)
+![image-20240515145852679](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151458735.png)
 
 
 
@@ -74,9 +80,7 @@ I2C 的协议定义了通讯的起始和停止信号、数据有效性、响应�
 
 当 SCL 线是高电平时 SDA 线从高电平向低电平切换，这个情况表示通讯的起始。当 SCL 是高电平时 SDA 线由低电平向高电平切换，表示通讯的停止。起始和停止信号一般由主机产生。
 
-![image-20240515143131041](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151431082.png)
-
-
+![image-20240515145919837](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151459876.png)
 
 
 
@@ -86,9 +90,7 @@ I2C 使用 SDA 信号线来传输数据，使用 SCL 信号线进行数据同步
 
 SDA 数据线在 SCL 的每个时钟周期传输一位数据.传输时，SCL 为高电平的时候 SDA 表示的数据有效,此时SDA的电平高低分别表示数据1/数据0。当 SCL 为低电平时，SDA的数据无效，一般在这个时候 SDA 进行电平切换，为下一次表示数据做好准备。每次数据传输都以字节为单位，每次传输的字节数不受限制。：
 
-![image-20240515143150543](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151431583.png)
-
-
+![image-20240515145933926](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151459966.png)
 
 **3.地址及数据方向**
 
@@ -100,7 +102,9 @@ I2C 协议规定设备地址可以是 7 位或 10 位，紧跟设备地址的一
 
 写数据方向时，SDA 由主机控制，从机接收信号。
 
-![image-20240515143221936](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151432968.png)
+
+
+![image-20240515145953101](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151459135.png)
 
 
 
@@ -108,9 +112,7 @@ I2C 协议规定设备地址可以是 7 位或 10 位，紧跟设备地址的一
 
 传输时主机产生时钟，在第 9 个时钟时，数据发送端会释放 SDA 的控制权，由数据接收端控制SDA，若 SDA 为高电平，表示非应答信号 (NACK)，低电平表示应答信号 (ACK)。
 
-
-
-![image-20240515143248928](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151432982.png)
+![image-20240515150009726](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151500778.png)
 
 [100](#jump)
 
@@ -205,14 +207,22 @@ B=0000 0001，则执行结果为A=00101101，
 
 1.初始化堆栈指针
 
-![image-20240515143321871](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151433903.png)
+![image-20240515150043054](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151500086.png)
+
+
+
+
 
 
 
 	stack栈, 开辟栈的大小为 0X00000400（1KB），名字为 STACK，NOINIT 即不初始化，可读可写，8（2^3）字节对齐
 	栈的作用是用于局部变量，函数调用，函数形参等的开销，栈的大小不能超过内部 SRAM 的大小。如果编写的程序比较大，定义的局部变量很多，那么就需要修改栈的大小。硬 fault 的时候，这时你就要考虑下是不是栈不够大，溢出了。
 
-![image-20240515143352785](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151433815.png)
+
+
+![image-20240515150109102](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151501132.png)
+
+
 
 
 
@@ -234,9 +244,9 @@ Heap堆
 
 5.调用C库函数__main初始化用户堆栈,从而最终调用main函数.
 
-![image-20240515143411220](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151434291.png)
 
 
+![image-20240515150140544](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151501607.png)
 
 
 

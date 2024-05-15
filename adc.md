@@ -20,8 +20,6 @@ CDS是correlated double sampling的缩写，是一种降噪AD转换方式。
 
  
 
- ![image-20240515141409803](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151414862.png)
-
  
 
  
@@ -32,11 +30,9 @@ CDS是correlated double sampling的缩写，是一种降噪AD转换方式。
 
  
 
-![image-20240515141427475](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151414518.png)
+ 
 
 
-
-![image-20240515141453578](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151414669.png)
 
  
 
@@ -114,15 +110,11 @@ MUX寄存器控制采样通道的顺序
 
 PGA寄存器和补偿寄存器各有3个，分别对红、绿、蓝3个通道做增益控制（可编程增益放大器）和信号补偿（偏移量）
 
-![image-20240515141611674](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151416729.png)
 
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps6.jpg)
-
- 
 
 配置寄存器
 
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps7.jpg) 
+
 
 配置寄存器控制工作模式和偏置水平。
 
@@ -188,7 +180,7 @@ MUX在1通道模式下将保持静止。
 
  
 
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps9.jpg) 
+
 
 有三个PGA寄存器（RGB）用于分别编程红色、绿色和蓝色通道的增益。
 
@@ -216,9 +208,7 @@ PGA寄存器的编码是直二进制的，所有零字对应于最小增益设�
 
  
 
- 
-
-![img](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\wps11.jpg) 
+  
 
 位D8到D0控制从250mV到+250mV的偏移范围。
 
