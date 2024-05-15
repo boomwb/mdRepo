@@ -58,7 +58,7 @@
 
 I2C 的协议定义了通讯的起始和停止信号、数据有效性、响应、仲裁、时钟同步和地址广播等环节。
 
-![image-20240515151710471](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151517544.png)
+<img src="https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151517544.png" alt="image-20240515151710471" style="zoom:50%;" />
 
 
 

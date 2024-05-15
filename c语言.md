@@ -108,13 +108,15 @@ int ()
 
 
 
-<img src="https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151416294.png" alt="image-20240515141653234" style="zoom:50%;" />
+![image-20240515152705614](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151527664.png)
 
 
 
 假如现有一32位int型数0x12345678，那么其MSB(Most Significant Byte，最高有效字节)为0x12，其LSB (Least Significant Byte，最低有效字节)为0x78，在CPU内存中有两种存放方式：（假设从地址0x4000开始存放）
 
-<img src="https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151417442.png" alt="image-20240515141716394" style="zoom:50%;" />
+
+
+![image-20240515152730173](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151527213.png)
 
 
 
