@@ -141,10 +141,6 @@ ROM与RAM
 
 但是HC32F460就完全不一样了，UART外设里的每个中断标志位，都是独立请求中断，必须单独给分配中断号，这样一来，一个UART就可以有5个中断服务程序了，编程其实更麻烦了。
 ————————————————
-版权声明：本文为CSDN博主「星沉地动」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/qq446252221/article/details/118548591
-
-![image-20231228094405467](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20231228094405467.png)
 
 
 
@@ -159,99 +155,6 @@ ROM与RAM
 
 
 
-
-
-
-```
-linux内核将SOC的I2C适配器(控制器)抽象成 i2c_adaptr
-
-struct i2c_adapter
-
-struct i2c_algorithm
-
-
-i2c_algorithm 就是 I2C 适
-配器与 IIC 设备进行通信的方法
-
-struct i2c_adapter {
-	const struct i2c_algorithm *algo; /* the algorithm to access the bus */
-	struct device dev;		/* the adapter device */
-	unsigned long locked_flags;	/* owned by the I2C core */
-
-	struct i2c_bus_recovery_info *bus_recovery_info;
-};
-
-
-struct i2c_algorithm {
-	......
-	int (*master_xfer)(struct i2c_adapter *adap,struct i2c_msg *msgs,int num);
-	int (*smbus_xfer) (struct i2c_adapter *adap, u16 addr,unsigned short flags, char read_write,u8 command, int size, union i2c_smbus_data *data);
-
- 	/* To determine what the adapter supports */
- 	u32 (*functionality) (struct i2c_adapter *);
-	......
-};
-master_xfer 就是 I2C 适配器的传输函数，可以通过此函数来完成与 IIC 设备之间的通信, 
-
-
-
-/home/ub20/luckfox_SDK/sysdrv/source/kernel/include/linux/i2c.h
-
-
-
-
-
-/home/ub20/luckfox_SDK/sysdrv/source/kernel/include/linux/device/bus.h
-
-```
-
-启动文件由汇编(xxx.s)编写，是系统上电复位后第一个执行的程序。
-
-主要做了以下工作：
-
-1.初始化堆栈指针
-
-![image-20240223104600082](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240223104600082.png)
-
-	stack栈, 开辟栈的大小为 0X00000400（1KB），名字为 STACK，NOINIT 即不初始化，可读可写，8（2^3）字节对齐
-	栈的作用是用于局部变量，函数调用，函数形参等的开销，栈的大小不能超过内部 SRAM 的大小。如果编写的程序比较大，定义的局部变量很多，那么就需要修改栈的大小。硬 fault 的时候，这时你就要考虑下是不是栈不够大，溢出了。
-
-
-![image-20240223105144525](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240223105144525.png)
-
-```
-Heap堆
-开辟堆的大小为 0X00000200（512 字节），名字为 HEAP，NOINIT 即不初始化，可读可写，8（2^3）字节对齐。__heap_base 表示对的起始地址，__heap_limit 表示堆的结束地址。堆是由低向高生长的，跟栈的生长方向相反。
-堆主要用来动态内存的分配，像 malloc() 函数申请的内存就在堆上面。
-```
-
-
-
-
-
-2.初始化PC指针 Reset_Handler
-
-3.初始化中断向量表 
-
-4.配置系统时钟  SystemInit
-
-5.调用C库函数__main初始化用户堆栈,从而最终调用main函数.
-
-![image-20240223113300560](G:\JianYun\我的坚果云\Typora_Work\Typora_Pic\image-20240223113300560.png)
-
-
-
-
-
-2024/2/20
-
-SPI Flash 128Block
-
-Sector  4KB(4096个地址) 1KB=1024字节
-
-Block    64KB
-
-页写入一次256个字节(Byte)
 
 
 

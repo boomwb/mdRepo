@@ -1,3 +1,9 @@
+Typora+PicGo+github上传图片
+
+https://juejin.cn/post/6844903768782290957
+
+
+
 # 进制输出
 
 ```
