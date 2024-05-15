@@ -36,9 +36,15 @@
 
 
 
-![image-20240515145656032](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151456079.png)
+![image-20240515150825432](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151508485.png)
 
-![image-20240515145618391](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151456453.png)
+
+
+![image-20240515150918368](https://raw.githubusercontent.com/boomwb/mdRepo/main/202405151509449.png)
+
+
+
+
 
 补充理解:
 
