@@ -2,7 +2,9 @@ Typora+PicGo+github上传图片
 
 https://juejin.cn/post/6844903768782290957
 
+# 位运算(&、|、^、~、>>、<<)
 
+![image-20240516113825147](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405161138244.png)
 
 # 进制输出
 
