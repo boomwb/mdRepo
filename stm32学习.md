@@ -244,5 +244,249 @@ Block    64KB
 
 [步进电机驱动技术3：基于ULN2003的步进电机驱动 - Moonan - 博客园 (cnblogs.com)](https://www.cnblogs.com/foxclever/p/14903679.html)
 
+
+
+```
+#include "main.h"
+
+// 定义控制引脚
+#define IN1_PIN GPIO_PIN_0
+#define IN1_PORT GPIOA
+#define IN2_PIN GPIO_PIN_1
+#define IN2_PORT GPIOA
+#define IN3_PIN GPIO_PIN_2
+#define IN3_PORT GPIOA
+#define IN4_PIN GPIO_PIN_3
+#define IN4_PORT GPIOA
+
+// 定义步进序列（四拍驱动）
+const uint8_t stepper_steps[4][4] = {
+    {1, 0, 0, 1},
+    {0, 1, 0, 1},
+    {0, 1, 1, 0},
+    {1, 0, 1, 0}
+};
+
+// 延时函数
+void delay(uint32_t ms) {
+    HAL_Delay(ms);
+}
+
+// 设置步进电机的引脚状态
+void setStepperPins(uint8_t step) {
+    HAL_GPIO_WritePin(IN1_PORT, IN1_PIN, stepper_steps[step][0]);
+    HAL_GPIO_WritePin(IN2_PORT, IN2_PIN, stepper_steps[step][1]);
+    HAL_GPIO_WritePin(IN3_PORT, IN3_PIN, stepper_steps[step][2]);
+    HAL_GPIO_WritePin(IN4_PORT, IN4_PIN, stepper_steps[step][3]);
+}
+
+int main(void) {
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+
+    uint8_t current_step = 0;
+
+    while (1) {
+        setStepperPins(current_step);
+        current_step = (current_step + 1) % 4; // 循环步进
+        delay(100); // 控制转速
+    }
+}
+
+```
+
+### 调整与优化
+
+1. **控制速度**：通过调节`delay`函数的延迟时间控制步进电机的速度。
+2. **步进方式**：可以选择半步驱动（Half Step）或微步驱动（Micro Step），需要调整步进序列。
+3. **电流控制**：采用带有电流控制功能的驱动模块（如A4988），可以调节电流限制保护电机。
+
+
+
+- 将步进电机驱动器（如A4988或DRV8825）与STM32开发板连接。通常需要连接四根线：步进（STEP）、方向（DIR）、使能（ENABLE）和接地（GND）。
+
+
+
+使用STM32F103与ULN2003驱动步进电机，并结合PID控制，可以实现精准的步进电机控制。以下是实现这一功能的详细步骤和示例代码。
+
+### 硬件连接
+
+- **STM32F103**：连接到ULN2003的输入引脚（IN1-IN4）
+- **ULN2003**：驱动步进电机
+- **步进电机**：连接到ULN2003的输出引脚（OUT1-OUT4）
+
+### 步骤概述
+
+1. 初始化GPIO
+	- 配置STM32的GPIO引脚来控制ULN2003。
+2. 配置定时器
+	- 使用定时器来生成控制步进电机的脉冲。
+3. 实现PID控制
+	- 编写PID算法，根据反馈调整步进电机的速度和方向。
+4. 实现步进电机驱动逻辑
+	- 编写步进电机的步进逻辑，实现前进、后退等功能。
+
+### 示例代码
+
+以下示例代码展示如何使用STM32F103标准库（STM32 Standard Peripheral Library）配置GPIO、定时器以及实现PID控制。
+
+#### 1. 初始化GPIO
+
+```
+c复制代码#include "stm32f10x.h"
+
+#define IN1_PIN GPIO_Pin_0
+#define IN2_PIN GPIO_Pin_1
+#define IN3_PIN GPIO_Pin_2
+#define IN4_PIN GPIO_Pin_3
+#define IN_GPIO_PORT GPIOA
+
+void GPIO_Config(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure;
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+
+    GPIO_InitStructure.GPIO_Pin = IN1_PIN | IN2_PIN | IN3_PIN | IN4_PIN;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(IN_GPIO_PORT, &GPIO_InitStructure);
+}
+```
+
+#### 2. 配置定时器
+
+```
+c复制代码#include "stm32f10x.h"
+
+void TIM2_Config(void)
+{
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+
+    TIM_TimeBaseStructure.TIM_Period = 999; 
+    TIM_TimeBaseStructure.TIM_Prescaler = 7199; 
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+
+    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    TIM_Cmd(TIM2, ENABLE);
+}
+
+void TIM2_IRQHandler(void)
+{
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
+    {
+        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+
+        // 步进电机控制逻辑
+    }
+}
+```
+
+#### 3. 实现PID控制
+
+```
+typedef struct {
+    float Kp;
+    float Ki;
+    float Kd;
+    float Setpoint;
+    float Integral;
+    float PreviousError;
+} PIDController;
+
+void PID_Init(PIDController *pid, float kp, float ki, float kd, float setpoint)
+{
+    pid->Kp = kp;
+    pid->Ki = ki;
+    pid->Kd = kd;
+    pid->Setpoint = setpoint;
+    pid->Integral = 0;
+    pid->PreviousError = 0;
+}
+
+float PID_Compute(PIDController *pid, float input)
+{
+    float error = pid->Setpoint - input;
+    pid->Integral += error;
+    float derivative = error - pid->PreviousError;
+    pid->PreviousError = error;
+    return pid->Kp * error + pid->Ki * pid->Integral + pid->Kd * derivative;
+}
+```
+
+#### 4. 步进电机驱动逻辑
+
+```
+c复制代码const uint8_t step_sequence[8] = {
+    0x01, // 0001
+    0x03, // 0011
+    0x02, // 0010
+    0x06, // 0110
+    0x04, // 0100
+    0x0C, // 1100
+    0x08, // 1000
+    0x09  // 1001
+};
+
+uint8_t step_index = 0;
+
+void StepMotor(int direction)
+{
+    if (direction == 1)
+    {
+        step_index = (step_index + 1) % 8;
+    }
+    else
+    {
+        step_index = (step_index + 7) % 8;
+    }
+
+    uint8_t step = step_sequence[step_index];
+
+    GPIO_WriteBit(IN_GPIO_PORT, IN1_PIN, (step & 0x01) ? Bit_SET : Bit_RESET);
+    GPIO_WriteBit(IN_GPIO_PORT, IN2_PIN, (step & 0x02) ? Bit_SET : Bit_RESET);
+    GPIO_WriteBit(IN_GPIO_PORT, IN3_PIN, (step & 0x04) ? Bit_SET : Bit_RESET);
+    GPIO_WriteBit(IN_GPIO_PORT, IN4_PIN, (step & 0x08) ? Bit_SET : Bit_RESET);
+}
+
+void TIM2_IRQHandler(void)
+{
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
+    {
+        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+
+        // 调用PID控制函数
+        float current_position = ...; // 获取当前位置
+        float control_signal = PID_Compute(&pid, current_position);
+
+        if (control_signal > 0)
+        {
+            StepMotor(1); // 前进
+        }
+        else if (control_signal < 0)
+        {
+            StepMotor(-1); // 后退
+        }
+    }
+}
+```
+
+### 总结
+
+这个示例代码展示了如何使用STM32F103和ULN2003驱动步进电机，并结合PID控制实现精准控制。具体的实现细节可能需要根据实际应用进行调整，如定时器的频率、PID参数的调整等。此外，还需实现获取步进电机当前位置的功能，以便提供PID控制所需的反馈信号。
+
 # 高级定时器
 
