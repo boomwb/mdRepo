@@ -1,0 +1,6 @@
+接线: MCU   oled
+	  C4	CS
+	  E6	DC
+	  A7 	RES	
+	  A5	SDA
+	  A4	SCK

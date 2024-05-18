@@ -1,0 +1,134 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: μVision V5.36.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 2 2, 2, LIC=IK1BF-6HBZK-KPZZY-IAYLW-6NJ0P-2DAZM
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.36.0.0
+Toolchain Path:  D:\Dev\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.36.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      CMSIS_AGDI.dll V1.33.0.0
+Dialog DLL:      TCM.DLL V1.53.0.0
+ 
+<h2>Project:</h2>
+D:\BaiduNetdiskDownload\A盘（资料盘）\1-程序源码_教程文档\1-[野火]《STM32库开发实战指南》(标准库源码)【优先学习】\1-书籍配套例程-F103VE指南者_20230722\25-SPI—读写串行FLASH（W25Q64）\3-spi_ADC\Project\RVMDK（uv5）\BH-F103.uvprojx
+Project File Date:  10/17/2023
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Dev\Keil_v5\ARM\ARMCC\Bin'
+Build target 'SPI FLASH'
+compiling stm32f10x_dbgmcu.c...
+compiling stm32f10x_bkp.c...
+compiling stm32f10x_adc.c...
+compiling stm32f10x_crc.c...
+compiling system_stm32f10x.c...
+compiling stm32f10x_dac.c...
+compiling stm32f10x_dma.c...
+compiling misc.c...
+compiling stm32f10x_exti.c...
+compiling stm32f10x_cec.c...
+compiling stm32f10x_can.c...
+compiling stm32f10x_flash.c...
+compiling stm32f10x_gpio.c...
+compiling stm32f10x_iwdg.c...
+compiling stm32f10x_i2c.c...
+compiling stm32f10x_pwr.c...
+compiling stm32f10x_rtc.c...
+compiling stm32f10x_fsmc.c...
+compiling stm32f10x_wwdg.c...
+compiling stm32f10x_rcc.c...
+compiling stm32f10x_spi.c...
+compiling stm32f10x_sdio.c...
+compiling stm32f10x_usart.c...
+compiling stm32f10x_tim.c...
+compiling bsp_led.c...
+compiling stm32f10x_it.c...
+compiling bsp_usart.c...
+compiling bsp_spi_flash.c...
+..\..\User\flash\bsp_spi_flash.c(38): error:  #20: identifier "FLASH_SPI_MOSI_PIN" is undefined
+  																	FLASH_SPI_MISO_PIN|FLASH_SPI_MOSI_PIN, ENABLE );
+..\..\User\flash\bsp_spi_flash.c(57): error:  #20: identifier "FLASH_SPI_MOSI_PORT" is undefined
+    GPIO_Init(FLASH_SPI_MOSI_PORT, &GPIO_InitStructure);
+..\..\User\flash\bsp_spi_flash.c(129): error:  #20: identifier "SCLK_L" is undefined
+  SCLK_L;
+..\..\User\flash\bsp_spi_flash.c(133): error:  #20: identifier "DATA_H" is undefined
+  		{DATA_H;}
+..\..\User\flash\bsp_spi_flash.c(134): error:  #20: identifier "DATA_L" is undefined
+  		else{DATA_L;}//?????????
+..\..\User\flash\bsp_spi_flash.c(135): error:  #20: identifier "SCLK_H" is undefined
+  		SCLK_H;//?????,????
+..\..\User\flash\bsp_spi_flash.c(144): error:  #20: identifier "CE_L" is undefined
+  CE_L;SCLK_L;delay_us(1);
+..\..\User\flash\bsp_spi_flash.c(144): error:  #20: identifier "SCLK_L" is undefined
+  CE_L;SCLK_L;delay_us(1);
+..\..\User\flash\bsp_spi_flash.c(144): warning:  #223-D: function "delay_us" declared implicitly
+  CE_L;SCLK_L;delay_us(1);
+..\..\User\flash\bsp_spi_flash.c(145): error:  #20: identifier "CE_H" is undefined
+  CE_H;delay_us(2);
+..\..\User\flash\bsp_spi_flash.c(156): error:  #20: identifier "CE_L" is undefined
+  CE_L;SCLK_L;delay_us(3);
+..\..\User\flash\bsp_spi_flash.c(156): error:  #20: identifier "SCLK_L" is undefined
+  CE_L;SCLK_L;delay_us(3);
+..\..\User\flash\bsp_spi_flash.c(156): warning:  #223-D: function "delay_us" declared implicitly
+  CE_L;SCLK_L;delay_us(3);
+..\..\User\flash\bsp_spi_flash.c(157): error:  #20: identifier "CE_H" is undefined
+  CE_H;delay_us(3);
+..\..\User\flash\bsp_spi_flash.c(165): error:  #20: identifier "SCLK_H" is undefined
+  	SCLK_H;delay_us(4);//??????????
+..\..\User\flash\bsp_spi_flash.c(172): error:  #20: identifier "DATA_L" is undefined
+  CE_L;DATA_L;
+..\..\User\flash\bsp_spi_flash.c(191): error:  #20: identifier "read_time" is undefined
+  read_time[0]=ds1302_read_rig(0x81);//??
+..\..\User\flash\bsp_spi_flash.c(203): error:  #20: identifier "TimeData" is undefined
+  TimeData.second=(read_time[0]>>4)*10+(read_time[0]&0x0f);
+..\..\User\flash\bsp_spi_flash.c(203): error:  #20: identifier "read_time" is undefined
+  TimeData.second=(read_time[0]>>4)*10+(read_time[0]&0x0f);
+..\..\User\flash\bsp_spi_flash.c(212): warning:  #1-D: last line of file ends without a newline
+   
+..\..\User\flash\bsp_spi_flash.c(21): warning:  #177-D: function "SPI_TIMEOUT_UserCallback"  was declared but never referenced
+  static uint16_t SPI_TIMEOUT_UserCallback(uint8_t errorCode);
+..\..\User\flash\bsp_spi_flash.c: 4 warnings, 17 errors
+compiling main.c...
+..\..\User\main.c(58): warning:  #223-D: function "SPI_FLASH_Init" declared implicitly
+  	SPI_FLASH_Init();
+..\..\User\main.c(61): warning:  #223-D: function "SPI_FLASH_ReadDeviceID" declared implicitly
+  	DeviceID = SPI_FLASH_ReadDeviceID();
+..\..\User\main.c(66): warning:  #223-D: function "SPI_FLASH_ReadID" declared implicitly
+  	FlashID = SPI_FLASH_ReadID();
+..\..\User\main.c(78): warning:  #223-D: function "SPI_FLASH_BufferRead" declared implicitly
+      SPI_FLASH_BufferRead(&cal_flag, SPI_FLASH_PageSize*0, 1);
+..\..\User\main.c(103): warning:  #223-D: function "SPI_FLASH_SectorErase" declared implicitly
+        SPI_FLASH_SectorErase(0);
+..\..\User\main.c(106): warning:  #223-D: function "SPI_FLASH_BufferWrite" declared implicitly
+        SPI_FLASH_BufferWrite(&cal_flag, SPI_FLASH_PageSize*0, 1); 
+..\..\User\main.c(138): warning:  #223-D: function "SPI_Flash_PowerDown" declared implicitly
+  	SPI_Flash_PowerDown();  
+..\..\User\main.c: 7 warnings, 0 errors
+"..\..\Output\SPI_FLASH.axf" - 17 Error(s), 11 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F1xx_DFP.2.1.0.pack
+                Keil.STM32F1xx_DFP.2.1.0
+                STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  D:\Dev\Keil_v5\Arm\Packs\Keil\STM32F1xx_DFP\2.1.0\Device\Include
+
+<h2>Collection of Component Files used:</h2>
+Target not created.
+Build Time Elapsed:  00:00:02
+</pre>
+</body>
+</html>
