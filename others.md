@@ -102,3 +102,34 @@
 3.读写内部Flash保证默认设置不会改变
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+# 离线安装NET Framework 3.5
+
+本文所提及的 microsoft-windows-netfx3-ondemand-package.cab可以从win10原版镜像里的sources\sxs目录下提取。
+以下是从网上收集来的一些常见的net3.5的安装方法
+（一）用cab格式的更新包安装
+方法1.把NetFx3.cab（即microsoft-windows-netfx3-ondemand-package.cab）放在C:\Windows文件夹里，然后右键开始菜单选择 命令提示符（管理员），运行以下命令：
+
+```
+dism /online /Enable-Feature /FeatureName:NetFx3 /Source:"%windir%" /LimitAccess
+```
+
+![image-20240528135641866](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405281356365.png)
+
+
+
+
+
+
+

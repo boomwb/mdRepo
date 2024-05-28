@@ -81,8 +81,6 @@ static 表示静态的变量，限制此变量作用域在一个源文件内，�
 **const char * **
 
 ```
-要将一个字符数组char buf[2] = {0x2C, 0x01};中的元素合并成一个单独的十进制数，假设数组中存储的是一个大端序（big-endian）的数值，那么我们可以按照权重合并每个字节。在这个特定的例子中，0x2C是高位字节，0x01是低位字节。
-大端序意味着数值的高位字节存储在内存的低地址上，而数值的低位字节存储在高地址上。考虑到这一点，我们可以将高位字节左移8位（即乘以256），然后与低位字节进行按位或操作，以合成完整的数值。
 
 一.const char *s  ||   char const *s
 是指向常量的指针,*s是不变的, s是可以改变的
@@ -91,23 +89,6 @@ s所指向的数据(即*s)由于const的修饰而不可通过指针s去修改。
 二.char *const s
 s是个不可修改的指针，但可通过指针s去修改s所指向的数据(即*s)。
 
-```
-
-
-
-```
-#include <stdio.h>
-
-int main() {
-    char buf[2] = {0x2C, 0x01};
-    
-    // 将char强制转换为unsigned char以避免符号扩展，然后进行合成操作
-    unsigned int num = ((unsigned char)buf[0] << 8) | (unsigned char)buf[1];
-    
-    printf("合成的十进制数是: %u\n", num);
-
-    return 0;
-}
 ```
 
 
@@ -130,19 +111,11 @@ int ()
 
 [百度](https://baidu.com)
 
-
-
-![image-20240515152705614](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151527664.png)
-
-
+<img src="https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151527664.png" alt="image-20240515152705614" style="zoom:67%;" />
 
 假如现有一32位int型数0x12345678，那么其MSB(Most Significant Byte，最高有效字节)为0x12，其LSB (Least Significant Byte，最低有效字节)为0x78，在CPU内存中有两种存放方式：（假设从地址0x4000开始存放）
 
-
-
-![image-20240515152730173](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151527213.png)
-
-
+<img src="https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151527213.png" alt="image-20240515152730173" style="zoom:67%;" />
 
 **总结：**
 
@@ -291,6 +264,32 @@ void judge_bigend_littleend3()
 }
 ```
 
+### age.1
+
+```
+编程:
+要将一个字符数组char buf[2] = {0x2C, 0x01}中的元素合并成一个单独的十进制数，假设数组中存储的是一个大端序（big-endian）的数值，
+
+那么我们可以按照权重合并每个字节。在这个特定的例子中，0x2C是高位字节，0x01是低位字节。
+大端序意味着数值的高位字节存储在内存的低地址上，而数值的低位字节存储在高地址上。考虑到这一点，我们可以将高位字节左移8位（即乘以256），然后与低位字节进行按位或操作，以合成完整的数值。
+#include <stdio.h>
+
+int main() {
+    char buf[2] = {0x2C, 0x01};
+    
+    // 将char强制转换为unsigned char以避免符号扩展，然后进行合成操作
+    unsigned int num = ((unsigned char)buf[0] << 8) | (unsigned char)buf[1];
+    
+    printf("合成的十进制数是: %u\n", num);
+
+    return 0;
+}
+```
+
+
+
+
+
 # 结构体
 
 ## 字节对齐
@@ -377,6 +376,144 @@ void ReadStructFromFlash(uint32_t address, UserInfo *dataStruct, uint16_t dataSi
         dataPointer++;
         dataSize -= 4;
     }
+}
+```
+
+进制打印
+
+```
+    printf( "%d\n",liu.num);
+    printf( "%#x\n",liu.num); //16进制
+    printf( "0x%x\n",liu.num);
+    %o       8进制
+```
+
+```
+//原始尺寸
+uint8_t  str_OrginalSize[] = {0xa5,0x43,0x02,0x01,0x01, 0x47, 0x00,  0x0d, 0x0a};
+
+char my_OrginalSize_key_handler(mui_t * ui)
+{
+   char cur_pos = ui->form_scroll_top;
+
+	int ret;
+   if( (cur_pos == 0 || cur_pos==1 || cur_pos==2 || cur_pos==3 )  && (key_mark_read >> KEY_OK_MARK_BIT) & 0x01 )
+   {
+		key_mark_read &= ~(0x01 << KEY_OK_MARK_BIT);//清楚ok 标志
+        
+        switch(cur_pos)
+        {
+            case 0:
+                str_OrginalSize[4]=0x01;
+                break;
+            case 1:
+                str_OrginalSize[4]=0x02;
+                break;
+            case 2:
+                str_OrginalSize[4]=0x03;
+                break;
+            case 3:
+                str_OrginalSize[4]=0x04;
+                break;
+            default:
+                break;
+        }
+        uint16_t sum_of_buf = 0;
+        //计算buf[1]到buf[4]的sum累加到buf[5]和buf[6]
+        for(int i=1; i<=4 ;i++)
+        {
+            sum_of_buf += str_OrginalSize[i];
+        }
+        str_OrginalSize[5]=sum_of_buf&0xff; //取低8位
+        str_OrginalSize[6]=(sum_of_buf<<8)&0xff; 
+        
+
+        str_OrginalSize[7]=0x0d;
+        str_OrginalSize[8]=0x0a;
+
+
+	  	if( xSemaphoreTake( uart0_mutex, ( TickType_t ) 0xffff ) == pdTRUE )
+		{
+			 // 发送命令
+			ret = my_send_cmd_data(str_OrginalSize, 9, TRUE, 10, 0x43); //等待10*5ms
+			xSemaphoreGive( uart0_mutex );
+		}
+		if(__OK_RET == ret)
+		{
+			printf("my send successful --\r\n");
+			if( rx_buffer[2] == 0x00)
+			{
+				printf("rx_buffer[2] == 0x00? buf[2]%d --\r\n",rx_buffer[2]);
+				return __OK_RET;
+			}
+			else
+			{
+				return __ERROR_RET;
+			
+			}
+		
+		}
+   }
+	
+   return 0;
+}
+
+void __CopyFunc_OrginalSize_ui_Callback(mui_t * ui)
+{
+
+    u8g2_t *u8g2 = ui->graphics_data;
+    char cur_pos = mui_GetCurrentCursorFocusPosition(ui);
+    char top = ui->form_scroll_top, i;
+    char *tbuf;
+    tbuf = (char *)getOriginalSize_str(tbuf, top);
+
+    u8g2_ClearBuffer(u8g2);
+    u8g2_DrawUTF8(u8g2, 39, 14, "原始尺寸 ");
+	
+	
+	
+    u8g2_DrawTriangle(u8g2, 128, 24, 120, 29, 120, 19);
+
+    u8g2_DrawXBMP(u8g2, 0, 20, 8, 9, left_jiantou_icon);
+
+    u8g2_DrawUTF8(u8g2, 20, 30, tbuf);
+    char index = ui->form_scroll_top + mui_GetCurrentCursorFocusPosition(ui);
+   
+    draw_sel_ui_mark_icon(ui, cfs._OriginalSizeSel-1);
+	
+
+ 
+//    char ret = OrginalSize_key_handler(ui);
+	
+	 char ret = my_OrginalSize_key_handler(ui);
+	 if(ret != 0)
+     {
+        if(ret == __OK_RET)
+        {
+//			printf("come here --------\r\n");
+//			if( xSemaphoreTake( u8g2_mutex, ( TickType_t ) 0xffff ) == pdTRUE )
+//			{
+							
+				cfs._OriginalSizeSel= index+1;
+                cfs._Temp_OriginalSizeSel = cfs._OriginalSizeSel;			
+				SAVE_WAIT_MESSAGE(u8g2);
+				vTaskDelay(100);
+				//key_mark_read = 0;
+				//xSemaphoreGive( u8g2_mutex );
+							
+//			} 
+				     
+		}
+		else if(ret == __ERROR_RET)
+		{
+			vTaskDelay(150);
+             Go_back_form(ui, MENUS);
+		}
+    }	 
+	 
+
+
+    
 }
 ```
 

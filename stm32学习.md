@@ -1,492 +1,397 @@
-## 通讯:
+Typora+PicGo+github上传图片
 
-### 单工/半双工/全双工/异步同步
+https://juejin.cn/post/6844903768782290957
 
-**单工**，即数据传输只在一个方向上传输，只能你给我发送或者我给你发送，方向是固定的，不能实现双向通信，如：室外天线电视、调频广播等。
+# 位运算(&、|、^、~、>>、<<)
 
-**半双工** ，比单工先进一点，传输方向可以切换，允许数据在两个方向上传输，但是某个时刻，只允许数据在一个方向上传输，可以基本双向通信，如：对讲机，IIC通信。
+![image-20240516113825147](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405161138244.png)
 
-**全双工**，允许数据同时在两个方向传输。发送和接收完全独立，在发送的同时可以接收信号，或者在接收的同时可以发送。它要求发送和接收设备都要有独立的发送和接收能力，如：电话通信，SPI通信，串口通信。
-
-串行通信可以分为两种类型，一种叫同步通信，另一种叫异步通信。
-
-简单的说，就是同步通信需要时钟信号，而异步通信不需要时钟信号。
-
-- **同步**：发送方发出数据后，等接收方发回响应以后才发下一个数据包的通讯方式。
-- **异步**：发送方发出数据后，不等接收方发回响应，接着发送下个数据包的通讯方式。
-
-**SPI和IIC为同步通信，UART为异步通信**，而USART为同步&异步通信。
-
-- USART：通用同步和异步收发器
-- UART：通用异步收发器
-
-即USART支持同步和异步收发，而UART只支持异步收发。
-
-如STM32的串口工作在同步模式时，即智能卡模式时，就需要连接同步时钟引脚。
-
-### 串口通讯
-
-串口通信校验方式：5种
-
-奇校验(ODD) , 偶校验(EVEN) , 1校验(MARK), 0校验(SPACE) , 无校验(NONE).
-
-**一.校验位:**
-
-在串行通讯所发送数据的最后一位, 用来粗略的检验数据在传输过程中是否出错.
-
-
-
-
-
-
-
-
-
-补充理解:
-
-
-
-### IIC
-
-对于通讯协议，我们也以分层的方式来理解，最基本的是把它分为物理层和协议层。物理层规定通讯系统中具有机械、电子功能部分的特性，确保原始数据在物理媒体的传输。协议层主要规定通讯逻辑，统一收发双方的数据打包、解包标准。
-
-**I2c物理层**
-
-
-
-**I2c协议层**
-
-I2C 的协议定义了通讯的起始和停止信号、数据有效性、响应、仲裁、时钟同步和地址广播等环节。
-
-
-
-
-
-其中 S 表示由主机的 I2C 接口产生的传输起始信号 (S)，这时连接到 I2C 总线上的所有从机都会接收到这个信号。
-起始信号产生后，所有从机就开始等待主机紧接下来广播的从机地址信号 (SLAVE_ADDRESS)。在 I2C 总线上，每个设备的地址都是唯一的，当主机广播的地址与某个设备地址相同时，这个设备就被选中了，没被选中的设备将会忽略之后的数据信号。根据 I2C 协议，这个从机地址可以是7 位或 10 位。
-在地址位之后，是传输方向的选择位，该位为 0 时，表示后面的数据传输方向是由主机传输至从机，即主机向从机写数据。该位为 1 时，则相反，即主机由从机读数据。从机接收到匹配的地址后，主机或从机会返回一个应答 (ACK) 或非应答 (NACK) 信号，只有接收到应答信号后，主机才能继续发送或接收数据。
-
- **1.通讯的起始和停止信号**
-
-当 SCL 线是高电平时 SDA 线从高电平向低电平切换，这个情况表示通讯的起始。当 SCL 是高电平时 SDA 线由低电平向高电平切换，表示通讯的停止。起始和停止信号一般由主机产生。
-
-
-
-
-
-**2.数据有效性**
-
-I2C 使用 SDA 信号线来传输数据，使用 SCL 信号线进行数据同步。
-
-SDA 数据线在 SCL 的每个时钟周期传输一位数据.传输时，SCL 为高电平的时候 SDA 表示的数据有效,此时SDA的电平高低分别表示数据1/数据0。当 SCL 为低电平时，SDA的数据无效，一般在这个时候 SDA 进行电平切换，为下一次表示数据做好准备。每次数据传输都以字节为单位，每次传输的字节数不受限制。：
-
-
-
-**3.地址及数据方向**
-
-主机发起通讯时，通过 SDA 信号线发送设备地址来查找从机。
-
-I2C 协议规定设备地址可以是 7 位或 10 位，紧跟设备地址的一个数据位用来表示数据传输方向，它是数据方向位 （R或者/W），第 8位或第 11 位。数据方向位为“1”时表示主机由从机读数据，该位为“0”时表示主机向从机写数据。
-
-读数据方向时，主机会释放对 SDA 信号线的控制，由从机控制 SDA 信号线.主机接收信号.
-
-写数据方向时，SDA 由主机控制，从机接收信号。
-
-
-
-
-
-
-
-**4.响应**
-
-传输时主机产生时钟，在第 9 个时钟时，数据发送端会释放 SDA 的控制权，由数据接收端控制SDA，若 SDA 为高电平，表示非应答信号 (NACK)，低电平表示应答信号 (ACK)。
-
-
-
-[100](#jump)
-
-
-
-32.768KHZ
-
-实时时钟晶振为什么选择是32768Hz的晶振，在百度上搜索的话大部分的答案都是说2的15次方是32768，使用这个频率的晶振，人们可以很容易的通过分频电路得到1Hz的计时脉冲。但是话有说回来了，2的整数次方很多为什么偏偏选择15呢？
-
-  2的15次方正好等于32768，反过来讲，如果要把32.768K的时钟频率经过15次分频的话，得到的频率正好是1Hz。
-
-以下是关于时钟晶振频率选择所需要考虑的几点： 
-
-1.频度越高计时精度越高，误差越小。
-
-2.由于各种原因，每个晶振的实际频率与其标称频率之间也存在偏差。
-
-3.晶振的工作环境对晶振的频率也有影响，用晶振的频率稳定度来表示不同晶振受环境影响的大小，其单位是ppm（百万分之一） 
-
-4.通常工作频率越高，单片机等数字电路的功耗越大，32.768KHz这个频率比较低，对降低电路功耗有利。 
-
-5.晶振的 32.768KHZ是大于20Khz(人耳听力上限)的第一个2的整幂数。
-
-
-
-## FLASH
-
-### 内部FLASH
-
-#### 理论
-
-1.解锁
-
-内部 FLASH 空间主要存储的是应用程序，是非常关键的数据，为了防止误操作修改了这些内容，芯片复位后默认会给控制寄存器 FLASH_CR 上锁，这个时候不允许设置 FLASH 的控制寄存器，从而不能修改 FLASH 中的内容。
-所以对 FLASH 写入数据前，需要先给它解锁。解锁的操作步骤如下：
-(1) 往 FPEC 键寄存器 FLASH_KEYR 中写入 KEY1 = 0x45670123
-(2) 再往 FPEC 键寄存器 FLASH_KEYR 中写入 KEY2 = 0xCDEF89AB
-
-2.页擦除
-
-在写入新的数据前，需要先擦除存储区域，STM32 提供了页（扇区）擦除指令和整个 FLASH 擦除 (批量擦除) 的指令，批量擦除指令仅针对主存储区。                          页擦除的过程如下：
-(1) 检查 FLASH_SR 寄存器中的“忙碌寄存器位 BSY”，以确认当前未执行任何 Flash 操作；
-(2) 在 FLASH_CR 寄存器中，将“激活页擦除寄存器位 PER ”置 1，
-(3) 用 FLASH_AR 寄存器选择要擦除的页；
-(4) 将 FLASH_CR 寄存器中的“开始擦除寄存器位 STRT ”置 1，开始擦除；
-(5) 等待 BSY 位被清零时，表示擦除完成。
-
-3.写入数据
-
-擦除完毕后即可写入数据，写入数据的过程并不是仅仅使用指针向地址赋值，赋值前还还需要配
-置一系列的寄存器，步骤如下：
-(1) 检查 FLASH_SR 中的 BSY 位，以确认当前未执行任何其它的内部 Flash 操作；
-(2) 将 FLASH_CR 寄存器中的“激活编程寄存器位 PG”置 1；
-(3) 向指定的 FLASH 存储器地址执行数据写入操作，每次只能以 16 位的方式写入；
-(4) 等待 BSY 位被清零时，表示写入完成。
-
-#### 应用例子
-
-### 外接FLASh
-
-DMA的基本定义
-DMA，全称Direct Memory Access，即直接存储器访问。
-
-DMA传输将数据从一个地址空间复制到另一个地址空间，
-提供在外设和存储器之间或者存储器和存储器之间的高速数据传输。
-当CPU初始化这个传输动作，传输动作本身是由DMA控制器来实现和完成的。
-DMA传输方式无需CPU直接控制传输，也没有中断处理方式那样保留现场和恢复现场过程，
-通过硬件为RAM和IO设备开辟一条直接传输数据的通道，使得CPU的效率大大提高。
-
-
-A=   110101x1
-B=   0000 0010
-~B= 1111 1101
-A&=~B---->1101 0101 //把B中为1的位对应于A的同样位上置0，A的其他位不变
-
-A=   1101 0111
-B=   0000 0010
-A&=B----> 0000 0010  //把A中其他位置0,
-
-A |= B
-A=0010 110x，
-B=0000 0001，则执行结果为A=00101101，
-也就是说A |= B是给B中为1的位对应于A的同样位上置1，A的其他位不变
-
-启动文件由汇编(xxx.s)编写，是系统上电复位后第一个执行的程序。
-
-主要做了以下工作：
-
-1.初始化堆栈指针
-
-
-
-	stack栈, 开辟栈的大小为 0X00000400（1KB），名字为 STACK，NOINIT 即不初始化，可读可写，8（2^3）字节对齐
-	栈的作用是用于局部变量，函数调用，函数形参等的开销，栈的大小不能超过内部 SRAM 的大小。如果编写的程序比较大，定义的局部变量很多，那么就需要修改栈的大小。硬 fault 的时候，这时你就要考虑下是不是栈不够大，溢出了。
-
-
+# 进制输出
 
 ```
-Heap堆
-开辟堆的大小为 0X00000200（512 字节），名字为 HEAP，NOINIT 即不初始化，可读可写，8（2^3）字节对齐。__heap_base 表示对的起始地址，__heap_limit 表示堆的结束地址。堆是由低向高生长的，跟栈的生长方向相反。
-堆主要用来动态内存的分配，像 malloc() 函数申请的内存就在堆上面。
+%o
+%x
+%d
 ```
 
-2.初始化PC指针 Reset_Handler
+# 关键字:
 
-3.初始化中断向量表 
-
-4.配置系统时钟  SystemInit
-
-5.调用C库函数__main初始化用户堆栈,从而最终调用main函数.
-
-
-
-2024/2/20
-
-SPI Flash 128Block
-
-Sector  4KB(4096个地址) 1KB=1024字节
-
-Block    64KB
-
-页写入一次256个字节(Byte)
-
-# 电机学习
-
-
-
-
-
-(2024.5.15 16点)
-
-**驱动IC ULN2003**
-
-参考链接 [【常用芯片】ULN2003工作原理及中文资料（实例：STM32驱动28BYJ48步进电机）-CSDN博客](https://blog.csdn.net/qq_38410730/article/details/79787766)
-
-![image-20240515162212298](https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151622383.png)
-
-电机博客 
-
-[步进电机驱动技术3：基于ULN2003的步进电机驱动 - Moonan - 博客园 (cnblogs.com)](https://www.cnblogs.com/foxclever/p/14903679.html)
-
-
+**static静态变量**
 
 ```
-#include "main.h"
+一、 static全局变量与普通的全局变量有什么区别 ?
+全局变量(外部变量)的说明之前再冠以static 就构成了静态的全局变量。
+   全局变量本身就是静态存储方式， 静态全局变量当然也是静态存储方式。 这两者在存储方式上并无不同。
+这两者的区别在于非静态全局变量的作用域是整个源程序， 当一个源程序由多个源文件组成时，非静态的全局变量在各个源文件中都是有效的。 而静态全局变量则限制了其作用域， 即只在定义该变量的源文件内有效， 在同一源程序的其它源文件中不能使用它。由于静态全局变量的作用域局限于一个源文件内，只能为该源文件内的函数公用，因此可以避免在其它源文件中引起错误。
+	static全局变量只初使化一次，防止在其他文件单元中被引用;
+	
+ 二、static局部变量和普通局部变量有什么区别 ？
+   把局部变量改变为静态变量后是改变了它的存储方式即改变了它的生存期。把全局变量改变为静态变量后是改变了它的作用域，限制了它的使用范围。
+  static局部变量只被初始化一次，下一次依据上一次结果值
+  
+ 所有未加static前缀的全局变量和函数都具有全局可见性，其它的源文件也能访问。如果加了static，就会对其它源文件隐藏。
+   static的第二个作用是保持变量内容的持久。存储在静态数据区的变量会在程序刚开始运行时就完成初始化，也是唯一的一次初始化。共有两种变量存储在静态存储区：全局变量和static变量，只不过和全局变量比起来，static可以控制变量的可见范围，说到底static还是用来隐藏的.
+   #include <stdio.h>
+ 
+     int fun(void){   
+         static int count = 10;    // 事实上此赋值语句从来没有执行过
+         return count--;
+     }
+ 
+     int count = 1;
+ 
+     int main(void)
+     {    
+         printf("global\t\tlocal static\n");
+         for(; count <= 10; ++count)
+             printf("%d\t\t%d\n", count, fun());    
+ 
+         return 0;
+     }
+ 结果为:
+ global    local static
+ 1			10
+ 2			9
+ 3			8
+ 4			7
+ 5			6
+ 6			5
+ 7			4
+ 8			3
+ 9			2
+ 10			1
+ 
+     
+   static的第三个作用是默认初始化为0。其实全局变量也具备这一属性，因为全局变量也存储在静态数据区。在静态数据区，内存中所有的字节默认值都是0x00，某些时候这一特点可以减少程序员的工作量。比如初始化一个稀疏矩阵，我们可以一个一个地把所有元素都置0，然后把不是0的几个元素赋值。如果定义成静态的，就省去了一开始置0的操作。再比如要把一个字符数组当字符串来用，但又觉得每次在字符数组末尾加’\0’太麻烦。如果把字符串定义成静态的，就省去了这个麻烦，因为那里本来就是’\0’。
+	
+```
 
-// 定义控制引脚
-#define IN1_PIN GPIO_PIN_0
-#define IN1_PORT GPIOA
-#define IN2_PIN GPIO_PIN_1
-#define IN2_PORT GPIOA
-#define IN3_PIN GPIO_PIN_2
-#define IN3_PORT GPIOA
-#define IN4_PIN GPIO_PIN_3
-#define IN4_PORT GPIOA
 
-// 定义步进序列（四拍驱动）
-const uint8_t stepper_steps[4][4] = {
-    {1, 0, 0, 1},
-    {0, 1, 0, 1},
-    {0, 1, 1, 0},
-    {1, 0, 1, 0}
+
+**extern**
+
+```
+extern int a;
+常在.h文件中
+显式的声明了a的存储空间是在程序的其他地方分配的，在文件中其他位置或者其他文件中寻找a这个变量。
+
+static 表示静态的变量，限制此变量作用域在一个源文件内，其他文件不能用extern来引用此变量，不仅适用于变量，函数也可以.
+```
+
+**const char * **
+
+```
+
+一.const char *s  ||   char const *s
+是指向常量的指针,*s是不变的, s是可以改变的
+s所指向的数据(即*s)由于const的修饰而不可通过指针s去修改。
+
+二.char *const s
+s是个不可修改的指针，但可通过指针s去修改s所指向的数据(即*s)。
+
+```
+
+
+
+# 按键
+
+```
+if(!KEY_LEFT_READ() && (((key_mark_scan >> KEY_LEFT_MARK_BIT) & 0x01) == 0))
+{
+    printf("LEFT press\r\n");
+	key_press = 1;
+    key_mark_read |=  (0x01 << KEY_LEFT_MARK_BIT); //记录一次按键等待被处理
+    key_mark_scan  |= (0x01 << KEY_LEFT_MARK_BIT);
+}
+else if(KEY_LEFT_READ() && (((key_mark_scan >> KEY_LEFT_MARK_BIT) & 0x01)))
+{	
+    key_mark_scan &= ~(0x01 << KEY_LEFT_MARK_BIT);
+}
+```
+
+
+
+# 函数指针
+
+指向函数的指针变量
+
+int ()
+
+
+
+# 大小端
+
+#### 一、什么是大小端？
+
+对于一个由2个字节组成的16位整数，在[内存](https://so.csdn.net/so/search?q=内存&spm=1001.2101.3001.7020)中存储这两个字节有两种方法：一种是将低序字节存储在起始地址，这称为小端(little-endian)字节序；另一种方法是将高序字节存储在起始地址，这称为大端(big-endian)字节序。
+
+[百度](https://baidu.com)
+
+<img src="https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151527664.png" alt="image-20240515152705614" style="zoom:67%;" />
+
+假如现有一32位int型数0x12345678，那么其MSB(Most Significant Byte，最高有效字节)为0x12，其LSB (Least Significant Byte，最低有效字节)为0x78，在CPU内存中有两种存放方式：（假设从地址0x4000开始存放）
+
+<img src="https://raw.githubusercontent.com/boomwb/mdRepo/main/img/202405151527213.png" alt="image-20240515152730173" style="zoom:67%;" />
+
+**总结：**
+
+**大端是高字节存放到内存的低地址**
+
+**小端是高字节存放到内存的高地址**
+
+#### 二、如何确定大小端
+
+有些CPU公司用大端（譬如C51单片机）；有些CPU用小端（譬如ARM）。（大部分是用小端模式，大端模式的不算多）。于是乎我们写代码时，当不知道当前环境是用大端模式还是小端模式时就需要用代码来检测当前系统的大小端。下面给出用程序判断大小端的两种方法：
+
+```
+#include <stdio.h>
+ 
+// 共用体中很重要的一点：a和b都是从u1的低地址开始存放的。
+// 假设u1所在的4字节地址分别是：0、1、2、3的话，那么a自然就是0、1、2、3；
+// b所在的地址是0而不是3.
+ 
+union myunion
+{
+	int a;
+	char b;
 };
-
-// 延时函数
-void delay(uint32_t ms) {
-    HAL_Delay(ms);
-}
-
-// 设置步进电机的引脚状态
-void setStepperPins(uint8_t step) {
-    HAL_GPIO_WritePin(IN1_PORT, IN1_PIN, stepper_steps[step][0]);
-    HAL_GPIO_WritePin(IN2_PORT, IN2_PIN, stepper_steps[step][1]);
-    HAL_GPIO_WritePin(IN3_PORT, IN3_PIN, stepper_steps[step][2]);
-    HAL_GPIO_WritePin(IN4_PORT, IN4_PIN, stepper_steps[step][3]);
-}
-
-int main(void) {
-    HAL_Init();
-    SystemClock_Config();
-    MX_GPIO_Init();
-
-    uint8_t current_step = 0;
-
-    while (1) {
-        setStepperPins(current_step);
-        current_step = (current_step + 1) % 4; // 循环步进
-        delay(100); // 控制转速
-    }
-}
-
-```
-
-### 调整与优化
-
-1. **控制速度**：通过调节`delay`函数的延迟时间控制步进电机的速度。
-2. **步进方式**：可以选择半步驱动（Half Step）或微步驱动（Micro Step），需要调整步进序列。
-3. **电流控制**：采用带有电流控制功能的驱动模块（如A4988），可以调节电流限制保护电机。
-
-
-
-- 将步进电机驱动器（如A4988或DRV8825）与STM32开发板连接。通常需要连接四根线：步进（STEP）、方向（DIR）、使能（ENABLE）和接地（GND）。
-
-
-
-使用STM32F103与ULN2003驱动步进电机，并结合PID控制，可以实现精准的步进电机控制。以下是实现这一功能的详细步骤和示例代码。
-
-### 硬件连接
-
-- **STM32F103**：连接到ULN2003的输入引脚（IN1-IN4）
-- **ULN2003**：驱动步进电机
-- **步进电机**：连接到ULN2003的输出引脚（OUT1-OUT4）
-
-### 步骤概述
-
-1. 初始化GPIO
-	- 配置STM32的GPIO引脚来控制ULN2003。
-2. 配置定时器
-	- 使用定时器来生成控制步进电机的脉冲。
-3. 实现PID控制
-	- 编写PID算法，根据反馈调整步进电机的速度和方向。
-4. 实现步进电机驱动逻辑
-	- 编写步进电机的步进逻辑，实现前进、后退等功能。
-
-### 示例代码
-
-以下示例代码展示如何使用STM32F103标准库（STM32 Standard Peripheral Library）配置GPIO、定时器以及实现PID控制。
-
-#### 1. 初始化GPIO
-
-```
-c复制代码#include "stm32f10x.h"
-
-#define IN1_PIN GPIO_Pin_0
-#define IN2_PIN GPIO_Pin_1
-#define IN3_PIN GPIO_Pin_2
-#define IN4_PIN GPIO_Pin_3
-#define IN_GPIO_PORT GPIOA
-
-void GPIO_Config(void)
+ 
+// 如果是小端模式则返回1，小端模式则返回0
+int is_little_endian(void)
 {
-    GPIO_InitTypeDef GPIO_InitStructure;
-
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-
-    GPIO_InitStructure.GPIO_Pin = IN1_PIN | IN2_PIN | IN3_PIN | IN4_PIN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(IN_GPIO_PORT, &GPIO_InitStructure);
+	union myunion u1;
+	u1.a = 0x12345678;				// 地址0的那个字节内是0x78（小端）或者0x12（大端）
+    if(0x78 == u1.b)
+        return 1;
+    else if(0x12 == u1.b)
+	    return 0;
 }
-```
-
-#### 2. 配置定时器
-
-```
-c复制代码#include "stm32f10x.h"
-
-void TIM2_Config(void)
+ 
+int is_little_endian2(void)
 {
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-    NVIC_InitTypeDef NVIC_InitStructure;
-
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-
-    TIM_TimeBaseStructure.TIM_Period = 999; 
-    TIM_TimeBaseStructure.TIM_Prescaler = 7199; 
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
-
-    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
-
-    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-
-    TIM_Cmd(TIM2, ENABLE);
+	int a = 0x12345678;
+	char b = *((char *)(&a));		// 指针方式其实就是共用体的本质
+	if(0x78 == b)
+        return 1;
+    else if(0x12 == b)
+	    return 0;
+}
+ 
+ 
+int main(void)
+{
+	int i = is_little_endian2();
+	//int i = is_little_endian();
+	if (i == 1)
+	{
+		printf("小端模式\n");
+	}
+	else
+	{
+		printf("大端模式\n");
+	}
+	
+	return 0;
 }
 
-void TIM2_IRQHandler(void)
-{
-    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
-    {
-        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-
-        // 步进电机控制逻辑
-    }
-}
 ```
 
-#### 3. 实现PID控制
+
+
+下面给出三种确定大小端错误的方案:
 
 ```
-typedef struct {
-    float Kp;
-    float Ki;
-    float Kd;
-    float Setpoint;
-    float Integral;
-    float PreviousError;
-} PIDController;
-
-void PID_Init(PIDController *pid, float kp, float ki, float kd, float setpoint)
-{
-    pid->Kp = kp;
-    pid->Ki = ki;
-    pid->Kd = kd;
-    pid->Setpoint = setpoint;
-    pid->Integral = 0;
-    pid->PreviousError = 0;
-}
-
-float PID_Compute(PIDController *pid, float input)
-{
-    float error = pid->Setpoint - input;
-    pid->Integral += error;
-    float derivative = error - pid->PreviousError;
-    pid->PreviousError = error;
-    return pid->Kp * error + pid->Ki * pid->Integral + pid->Kd * derivative;
-}
+	// 强制类型转换
+int a;
+char b;
+a = 1;
+b = (char)a;
+printf("b = %d.\n", b);
 ```
 
-#### 4. 步进电机驱动逻辑
+```
+	// 移位
+int a, b;
+a = 1;
+b = a >> 1;
+printf("b = %d.\n", b);
+```
 
 ```
-c复制代码const uint8_t step_sequence[8] = {
-    0x01, // 0001
-    0x03, // 0011
-    0x02, // 0010
-    0x06, // 0110
-    0x04, // 0100
-    0x0C, // 1100
-    0x08, // 1000
-    0x09  // 1001
-};
+	// 位与
+int a = 1;
+int b = a & 0xff;		// 也可以写成：char b = a & 0x01;
+printf("b = %d.\n", b);
+```
 
-uint8_t step_index = 0;
+位与、移位、强制类型转换等运算是编译器提供的运算，这个运算是高于内存层次的（或者说这些运算在二进制层次具有可移植性，也就是说&的时候一定是高字节&高字节，低字节&低字节，和二进制存储无关）。
 
-void StepMotor(int direction)
+#### **怎么测试我的电脑是小端模式还是大端模式呢？**
+
+1.将int 48存起来，然后取得其地址，再将这个地址转为char* 这时候，如果是小端存储，那么char*指针就指向48；
+48对应的ASCII码为字符‘0’；
+
+```
+void judge_bigend_littleend1()
 {
-    if (direction == 1)
-    {
-        step_index = (step_index + 1) % 8;
-    }
+    int i = 48;
+    int* p = &i;
+    char c = 0;
+    c = *((char*)p);
+
+    if (c == '0')
+        printf("小端\n");
     else
-    {
-        step_index = (step_index + 7) % 8;
-    }
-
-    uint8_t step = step_sequence[step_index];
-
-    GPIO_WriteBit(IN_GPIO_PORT, IN1_PIN, (step & 0x01) ? Bit_SET : Bit_RESET);
-    GPIO_WriteBit(IN_GPIO_PORT, IN2_PIN, (step & 0x02) ? Bit_SET : Bit_RESET);
-    GPIO_WriteBit(IN_GPIO_PORT, IN3_PIN, (step & 0x04) ? Bit_SET : Bit_RESET);
-    GPIO_WriteBit(IN_GPIO_PORT, IN4_PIN, (step & 0x08) ? Bit_SET : Bit_RESET);
-}
-
-void TIM2_IRQHandler(void)
-{
-    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
-    {
-        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-
-        // 调用PID控制函数
-        float current_position = ...; // 获取当前位置
-        float control_signal = PID_Compute(&pid, current_position);
-
-        if (control_signal > 0)
-        {
-            StepMotor(1); // 前进
-        }
-        else if (control_signal < 0)
-        {
-            StepMotor(-1); // 后退
-        }
-    }
+        printf("大端\n");
 }
 ```
 
-### 总结
+2.定义变量int i=1;将 i 的地址拿到，强转成char*型，这时候就取到了 i 的低地址，这时候如果是1就是小端存储，如果是0就是大端存储.
 
-这个示例代码展示了如何使用STM32F103和ULN2003驱动步进电机，并结合PID控制实现精准控制。具体的实现细节可能需要根据实际应用进行调整，如定时器的频率、PID参数的调整等。此外，还需实现获取步进电机当前位置的功能，以便提供PID控制所需的反馈信号。
+```
+void judge_bigend_littleend2()
+{
+    int i = 1;
+    char c = (*(char*)&i);
 
-# 高级定时器
+    if (c)
+        printf("小端\n");
+    else
+        printf("大端\n");
+}
+```
+
+3.定义联合体，一个成员是多字节，一个是单字节，给多字节的成员赋一个最低一个字节不为0，其他字节为0 的值，再用第二个成员来判断，如果第二个字节不为0，就是小端，若为0，就是大端。
+
+```
+void judge_bigend_littleend3()
+{
+    union
+    {
+        int i;
+        char c;
+    }un;
+    un.i = 1;
+
+    if (un.c == 1)
+        printf("小端\n");
+    else
+        printf("大端\n");
+}
+```
+
+### age.1
+
+```
+编程:
+要将一个字符数组char buf[2] = {0x2C, 0x01}中的元素合并成一个单独的十进制数，假设数组中存储的是一个大端序（big-endian）的数值，
+
+那么我们可以按照权重合并每个字节。在这个特定的例子中，0x2C是高位字节，0x01是低位字节。
+大端序意味着数值的高位字节存储在内存的低地址上，而数值的低位字节存储在高地址上。考虑到这一点，我们可以将高位字节左移8位（即乘以256），然后与低位字节进行按位或操作，以合成完整的数值。
+#include <stdio.h>
+
+int main() {
+    char buf[2] = {0x2C, 0x01};
+    
+    // 将char强制转换为unsigned char以避免符号扩展，然后进行合成操作
+    unsigned int num = ((unsigned char)buf[0] << 8) | (unsigned char)buf[1];
+    
+    printf("合成的十进制数是: %u\n", num);
+
+    return 0;
+}
+```
+
+
+
+
+
+# 结构体
+
+## 字节对齐
+
+当声明一个结构体时，编译器通常会按照特定的内存对齐规则来布局成员，这些规则旨在提高访问内存的效率。在大多数系统上，数据类型的自然对齐是它的大小，即 `int` 类型通常需要对齐到4字节边界，`char` 类型对齐到1字节边界
+
+```
+struct Info 
+{
+	char i;
+	int j;
+}III;
+	-> 8
+typedef struct _userinfo//保存的信息
+{
+	unsigned char id;
+	unsigned char port;;		
+	struct Info III;
+}USERINFO;
+	-> 12
+
+```
+
+1. **`char i`**: 1字节大小，不需要额外对齐。
+2. **内存填充** (Padding): 由于 `int` 类型通常需要在4字节对齐的边界上，编译器可能会在 `char i` 之后插入3个字节的内存填充，以确保 `int j` 从4字节边界开始。
+3. **`int j`**: 4字节大小，按4字节边界对齐。
+
+因此，`struct Info III` 的总大小是8字节：1字节用于 `char i`，3字节的填充，然后是4字节的 `int j`.
+
+**对于 `struct _userinfo` (`USERINFO`)：**
+
+- `unsigned char id` 占用 1 字节，无需额外填充。
+- `unsigned char port` 占用 1 字节。直到这里，结构体已经使用了 2 字节，但是紧接着的是 `struct Info` 类型，它要求4字节对齐，因此编译器将添加2字节的填充，以确保 `struct Info III` 从下一个4字节对齐的边界地址开始。
+
+那么 `struct _userinfo` 的总大小就是 `struct Info` 的大小 8 字节加上 `unsigned char id`, `unsigned char port`，以及在它们和 `struct Info III` 之间的 2 字节填充，加起来总共是 12 字节。
+
+
+
+```
+HAL_StatusTypeDef WriteStructToFlash(uint32_t address, UserInfo *dataStruct, uint16_t dataSize) {
+    HAL_StatusTypeDef status = HAL_OK;
+    // 首先，需要擦除Flash
+    FLASH_EraseInitTypeDef EraseInitStruct;
+    uint32_t PAGEError = 0;
+    EraseInitStruct.TypeErase   = FLASH_TYPEERASE_PAGES;
+    EraseInitStruct.PageAddress = address;
+    EraseInitStruct.NbPages     = 1; //擦除一个Page
+
+    // 解锁Flash
+    HAL_FLASH_Unlock();
+
+    // 擦除Flash
+    status = HAL_FLASHEx_Erase(&EraseInitStruct, &PAGEError);
+    if (status != HAL_OK) {
+        return status;
+    }
+
+    // 写入数据
+    uint32_t *dataPointer = (uint32_t*)dataStruct;
+    while (dataSize > 0) {
+        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address, *(uint32_t*)(dataPointer)) == HAL_OK) {
+            address += 4; // 地址增加4字节
+            dataPointer++; // 数据指针增加1
+            dataSize -= 4; // 剩余数据大小减少4字节
+        } else {
+            // 错误处理
+            status = HAL_ERROR;
+            break;
+        }
+    }
+    // 锁定Flash
+    HAL_FLASH_Lock();
+
+    return status;
+}
+
+
+
+void ReadStructFromFlash(uint32_t address, UserInfo *dataStruct, uint16_t dataSize) {
+    uint32_t *dataPointer = (uint32_t*)dataStruct;
+    while (dataSize > 0) {
+        *dataPointer = *(__IO uint32_t*)address;
+        address += 4;
+        dataPointer++;
+        dataSize -= 4;
+    }
+}
+```
 
